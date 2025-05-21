@@ -1,0 +1,135 @@
+<odoo>
+    <data>
+        <template id="gst_bill_detail_report">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>GST Bill Detail Report</h2>
+                        <p>
+                            <strong>Date From:</strong>
+                            <t t-esc="date_from"/>
+                        </p>
+                        <p>
+                            <strong>Date To:</strong>
+                            <t t-esc="date_to"/>
+                        </p>
+
+                        <table class="table table-sm o_main_table" style="border: 1px solid black !important;">
+                            <thead>
+                                <tr>
+                                    <th>Company Name</th>
+                                    <th>Bill No</th>
+                                    <th>Date</th>
+                                    <th>Bill Name</th>
+                                    <th>GSTIN</th>
+                                    <th>Total</th>
+                                    <th>Dis</th>
+                                    <th>CGST</th>
+                                    <th>SGST</th>
+                                    <th>IGST</th>
+                                    <th>Net Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="docs" t-as="o">
+                                    <tr>
+                                        <td>
+                                            <t t-esc="o.company_id.name"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="o.name"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="o.date_order" t-options='{"widget": "date"}'/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="o.partner_id.name"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="o.partner_id.vat"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="o.amount_total"/>
+                                        </td>
+                                        <td>0.00</td>
+                                        <td>
+                                            <t t-esc="o.amount_tax / 2"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="o.amount_tax / 2"/>
+                                        </td>
+                                        <td>0.00</td>
+                                        <td>
+                                            <t t-esc="o.amount_total"/>
+                                        </td>
+                                    </tr>
+                                    <!-- Line Items -->
+                                    <tr>
+                                        <td colspan="11">
+                                            <table style="width:100%; border-top:1px solid black; margin-top:5px;">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Item Name</th>
+                                                        <th>Product Name</th>
+                                                        <th>HSN CODE</th>
+                                                        <th>Qnty</th>
+                                                        <th>Rate</th>
+                                                        <th>Total</th>
+                                                        <th>%</th>
+                                                        <th>CGST</th>
+                                                        <th>%</th>
+                                                        <th>SGST</th>
+                                                        <th>%</th>
+                                                        <th>IGST</th>
+                                                        <th>Final Total</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <t t-foreach="o.order_line" t-as="line">
+                                                        <tr>
+                                                            <td>
+                                                                <t t-esc="line.name"/>
+                                                            </td>
+                                                            <td>
+                                                                <t t-esc="line.product_id.name"/>
+                                                            </td>
+                                                            <td>
+                                                                <t t-esc="line.product_id.product_tmpl_id.l10n_in_hsn_code"/>
+                                                            </td>
+                                                            <td>
+                                                                <t t-esc="line.product_uom_qty"/>
+                                                            </td>
+                                                            <td>
+                                                                <t t-esc="line.price_unit"/>
+                                                            </td>
+                                                            <td>
+                                                                <t t-esc="line.price_subtotal"/>
+                                                            </td>
+                                                            <td>9.0</td>
+                                                            <td>
+                                                                <t t-esc="(line.price_subtotal * 0.09)"/>
+                                                            </td>
+                                                            <td>9.0</td>
+                                                            <td>
+                                                                <t t-esc="(line.price_subtotal * 0.09)"/>
+                                                            </td>
+                                                            <td>0.0</td>
+                                                            <td>0.00</td>
+                                                            <td>
+                                                                <t t-esc="line.price_total"/>
+                                                            </td>
+                                                        </tr>
+                                                    </t>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
