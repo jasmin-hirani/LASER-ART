@@ -1,0 +1,54 @@
+<odoo>
+    <data>
+        <record id="gst_report_wizard_form" model="ir.ui.view">
+            <field name="name">GST Report Wizard Form</field>
+            <field name="model">gst.report.wizard</field>
+            <field name="arch" type="xml">
+                <form string="GST Bill Detail Report">
+                    <group>
+                        <group>
+                            <field name="date_from"
+                                   string="Date Range"
+                                   widget="daterange"
+                                   options='{"end_date_field": "date_to", "always_range": 1}'
+                                   required="1"/>
+                            <field name="date_to" invisible="1"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="action_print_report" string="Print Report" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="gst_report_wizard_action" model="ir.actions.act_window">
+            <field name="name">GST Bill Detail Report</field>
+            <field name="res_model">gst.report.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="view_id" ref="gst_report_wizard_form"/>
+        </record>
+
+        <!-- Menu Item -->
+        <menuitem id="gst_report_menu"
+                  name="GST Bill Detail Report"
+                  action="gst_report_wizard_action"
+                  parent="account.account_reports_management_menu"
+                  sequence="2"/>
+
+        <!-- Report Action (Connects Python, XML and QWeb) -->
+        <record id="action_gst_detail_report" model="ir.actions.report">
+            <field name="name">GST Bill Detail Report</field>
+            <field name="model">gst.report.wizard</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">tl_gst_detail_report.gst_bill_detail_report</field>
+            <field name="report_file">tl_gst_detail_report.gst_bill_detail_report</field>
+            <field name="binding_model_id" ref="model_gst_report_wizard"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="tl_gst_detail_report.paperformat_gst_bill_detail"/>
+        </record>
+    </data>
+</odoo>

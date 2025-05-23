@@ -1,0 +1,175 @@
+<odoo>
+    <data>
+        <template id="gst_bill_detail_report">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <div class="page">
+
+                        <h2 style="text-align: right;">LASER ART</h2>
+                        <h3 style="margin-top: -7px; text-align: center; font-size: 22px; font-weight: bold;">
+                            GST Bill Detail Report
+                        </h3>
+                        <p>
+                            <strong>
+                                <t t-esc="'Date: %s To: %s' % (date_from, date_to)"/>
+                            </strong>
+                        </p>
+
+                        <table class="table table-sm o_main_table">
+                            <thead style="border: 1px solid black !important;">
+                                <tr>
+                                    <th style="text-align: center; font-weight: bold;">Company Name</th>
+                                    <th style="text-align: center; font-weight: bold;">Bill No</th>
+                                    <th style="text-align: center; font-weight: bold;">Date</th>
+                                    <th style="text-align: center; font-weight: bold;">Bill Name</th>
+                                    <th style="text-align: center; font-weight: bold;">GSTIN</th>
+                                    <th style="text-align: center; font-weight: bold;">Total</th>
+                                    <th style="text-align: center; font-weight: bold;">Dis.</th>
+                                    <th style="text-align: center; font-weight: bold;">CGST</th>
+                                    <th style="text-align: center; font-weight: bold;">SGST</th>
+                                    <th style="text-align: center; font-weight: bold;">IGST</th>
+                                    <th style="text-align: center; font-weight: bold;">Net Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="docs" t-as="o">
+                                    <tr style="background-color: #1d9ccf !important;
+                                     border: none !important; font-weight: bold !important;">
+                                        <td style="text-align: center; border: none; color: white !important;">
+                                            <t t-esc="o.company_id.name"/>
+                                        </td>
+                                        <td style="text-align: center; border: none; color: white !important;">
+                                            <t t-esc="o.name"/>
+                                        </td>
+                                        <td style="text-align: center; border: none; color: white !important;">
+                                            <t t-esc="o.invoice_date" t-options='{"widget": "date"}'/>
+                                        </td>
+                                        <td style="text-align: center; border: none; color: white !important;">
+                                            <t t-esc="o.partner_id.name"/>
+                                        </td>
+                                        <td style="text-align: center; border: none; color: white !important;">
+                                            <t t-esc="o.partner_id.vat"/>
+                                        </td>
+                                        <td style="text-align: center; border: none; color: white !important;">
+                                            <t t-esc="o.amount_untaxed"/>
+                                        </td>
+                                        <td style="text-align: center; border: none; color: white !important;">
+                                            <t t-esc="o.total_discount_amount"/>
+                                        </td>
+                                        <td style="text-align: center; border: none; color: white !important;">
+                                            <t t-esc="o.cgst_amount"/>
+                                        </td>
+                                        <td style="text-align: center; border: none; color: white !important;">
+                                            <t t-esc="o.sgst_amount"/>
+                                        </td>
+                                        <td style="text-align: center; border: none; color: white !important;">
+                                            <t t-esc="o.igst_amount"/>
+                                        </td>
+                                        <td style="text-align: center; border: none; color: white !important;">
+                                            <t t-esc="o.amount_total"/>
+                                        </td>
+                                    </tr>
+                                    <!-- Line Items -->
+                                    <tr>
+                                        <td colspan="11">
+                                            <table style="width:100%; margin-top:5px;">
+                                                <thead>
+                                                    <tr style="font-size: 14px;">
+                                                        <th style="text-align: center; font-weight: bold;">
+                                                            Item Name
+                                                        </th>
+                                                        <th style="text-align: center; font-weight: bold;">
+                                                            Product Name
+                                                        </th>
+                                                        <th style="text-align: center; font-weight: bold;">
+                                                            HSN CODE
+                                                        </th>
+                                                        <th style="text-align: center; font-weight: bold;">
+                                                            Qnty
+                                                        </th>
+                                                        <th style="text-align: center; font-weight: bold;">
+                                                            Rate
+                                                        </th>
+                                                        <th style="text-align: center; font-weight: bold;">
+                                                            Total
+                                                        </th>
+                                                        <th style="text-align: center; font-weight: bold;">
+                                                            %
+                                                        </th>
+                                                        <th style="text-align: center; font-weight: bold;">
+                                                            CGST
+                                                        </th>
+                                                        <th style="text-align: center; font-weight: bold;">
+                                                            %
+                                                        </th>
+                                                        <th style="text-align: center; font-weight: bold;">
+                                                            SGST
+                                                        </th>
+                                                        <th style="text-align: center; font-weight: bold;">
+                                                            %
+                                                        </th>
+                                                        <th style="text-align: center; font-weight: bold;">
+                                                            IGST
+                                                        </th>
+                                                        <th style="text-align: center; font-weight: bold;">
+                                                            Final Total
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <t t-foreach="o.invoice_line_ids" t-as="line">
+                                                        <tr style="font-size: 14px; border-bottom: 0px solid white;">
+                                                            <td style="text-align: left; padding: 4px 0; padding-left: 4px;">
+                                                                <t t-esc="line.name"/>
+                                                            </td>
+                                                            <td style="text-align: left; padding: 4px 0; padding-left: 4px;">
+                                                                <t t-esc="line.product_id.name"/>
+                                                            </td>
+                                                            <td style="text-align: center; padding: 4px 0;">
+                                                                <t t-esc="line.product_id.product_tmpl_id.l10n_in_hsn_code"/>
+                                                            </td>
+                                                            <td style="text-align: center; padding: 4px 0;">
+                                                                <t t-esc="line.quantity"/>
+                                                            </td>
+                                                            <td style="text-align: center; padding: 4px 0;">
+                                                                <t t-esc="line.price_unit"/>
+                                                            </td>
+                                                            <td style="text-align: center; padding: 4px 0;">
+                                                                <t t-esc="line.price_subtotal"/>
+                                                            </td>
+                                                            <td style="text-align: center; padding: 4px 0;">
+                                                                <t t-esc="line.cgst_rate"/>
+                                                            </td>
+                                                            <td style="text-align: center; padding: 4px 0;">
+                                                                <t t-esc="line.cgst_amount"/>
+                                                            </td>
+                                                            <td style="text-align: center; padding: 4px 0;">
+                                                                <t t-esc="line.sgst_rate"/>
+                                                            </td>
+                                                            <td style="text-align: center; padding: 4px 0;">
+                                                                <t t-esc="line.sgst_amount"/>
+                                                            </td>
+                                                            <td style="text-align: center; padding: 4px 0;">
+                                                                <t t-esc="line.igst_rate"/>
+                                                            </td>
+                                                            <td style="text-align: center; padding: 4px 0;">
+                                                                <t t-esc="line.igst_amount"/>
+                                                            </td>
+                                                            <td style="text-align: center; padding: 4px 0;">
+                                                                <t t-esc="line.amount_with_tax"/>
+                                                            </td>
+                                                        </tr>
+                                                    </t>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
